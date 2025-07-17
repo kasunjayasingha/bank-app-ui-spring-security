@@ -1,27 +1,36 @@
-import { Injectable,inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot,Router } from '@angular/router';
-import { User } from '../model/user.model';
+import { inject } from '@angular/core';
+import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
+import {AuthService} from "../services/AuthService";
 
-@Injectable()
-export class AuthActivateRouteGuard {
-    user = new User();
-    
-    constructor(private router: Router){
+export const AuthGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
 
-    }
+  const hasValidAccessToken = authService.hasValidAccessToken();
 
-    canActivate(route:ActivatedRouteSnapshot, state:RouterStateSnapshot){
-        if(sessionStorage.getItem('userdetails')){
-            this.user = JSON.parse(sessionStorage.getItem('userdetails')!);
-        }
-        if(this.user.email.length===0){
-            this.router.navigate(['login']);
-        }
-        return this.user.email.length!==0?true:false;
-    }
-
-}
-
-export const AuthGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
-    return inject(AuthActivateRouteGuard).canActivate(next, state);
+  if (!hasValidAccessToken) {
+    router.navigate(['/login']);
+    return false;
   }
+
+  const requiredRoles = route.data['roles'] as string[];
+  if (!requiredRoles || requiredRoles.length === 0) {
+    return true; // No roles required
+  }
+
+
+
+  console.log(`User roles: ${JSON.stringify(authService.getUserRoles())}`);
+
+  const hasRequiredRole = requiredRoles.some(role => authService.getUserRoles().includes(role));
+  if (!hasRequiredRole) {
+    router.navigate(['/home']); // or show "Access Denied"
+    return false;
+  }
+
+  return true;
+};

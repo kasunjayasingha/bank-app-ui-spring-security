@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user.model';
+import {AuthService} from "../../services/AuthService";
 
 @Component({
   selector: 'app-logout',
@@ -10,14 +11,13 @@ import { User } from 'src/app/model/user.model';
 export class LogoutComponent implements OnInit {
 
   user = new User();
-  constructor(private router : Router) {
+  constructor(private router : Router,
+              private authService : AuthService,) {
 
   }
 
   ngOnInit(): void {
-    window.sessionStorage.setItem("Authorization","");
-    window.sessionStorage.setItem("userdetails","");
-    // window.sessionStorage.setItem("XSRF-TOKEN","");
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 
