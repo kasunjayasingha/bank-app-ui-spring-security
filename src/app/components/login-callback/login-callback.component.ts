@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
+import {authConfig} from "../../auth/auth.config";
 
 @Component({
   selector: 'app-login-callback',
@@ -10,14 +11,18 @@ export class LoginCallbackComponent implements OnInit {
   constructor(private oauthService: OAuthService, private router: Router) {}
 
   async ngOnInit(): Promise<void> {
-    // Handle login redirect and parse the token
+    // ✅ Process the OAuth2 redirect with code+state
+    this.oauthService.configure(authConfig);
     await this.oauthService.loadDiscoveryDocumentAndTryLogin();
 
+    // ✅ Once processed, check token validity
     if (this.oauthService.hasValidAccessToken()) {
-      const state = this.oauthService.state || '/dashboard';
-      this.router.navigateByUrl(state); // redirect to original page or home
+      console.log('Token is valid, redirecting to the application dashboard');
+      const redirectPath = this.oauthService.state || '/dashboard';
+      this.router.navigateByUrl(redirectPath);
     } else {
-      this.router.navigate(['/login']);
+      console.warn('Token not valid — restarting login flow');
+      this.oauthService.initCodeFlow();
     }
   }
 }

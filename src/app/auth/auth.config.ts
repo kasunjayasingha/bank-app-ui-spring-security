@@ -1,13 +1,15 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 
 export const authConfig: AuthConfig = {
-  issuer: 'http://localhost:9000', // Your Spring Auth Server
+  issuer: 'http://localhost:9000', // your Spring Authorization Server
   redirectUri: window.location.origin + '/login/callback',
   clientId: 'eazypublicclient',
-  responseType: 'code',
+  responseType: 'code', // required for PKCE
   scope: 'openid email',
-  showDebugInformation: true,
-  disableAtHashCheck: false,
-  requireHttps: false, // Only for development!
-  disablePKCE: false,
+  strictDiscoveryDocumentValidation: false,
+  showDebugInformation: false,
+  requireHttps: false, // allow HTTP for local testing
+  disableAtHashCheck: true,
+  useSilentRefresh: false,
+  disablePKCE: false // ✅ ENABLE PKCE flow
 };

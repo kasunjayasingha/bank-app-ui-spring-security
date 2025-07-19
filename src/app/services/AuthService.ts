@@ -5,7 +5,6 @@ import {authConfig} from "../auth/auth.config";
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(private oauthService: OAuthService) {
-    this.configure();
   }
 
   private configure() {
@@ -14,7 +13,16 @@ export class AuthService {
   }
 
   login() {
-    this.oauthService.initLoginFlow();
+    // this.oauthService.initLoginFlow();
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+      if (!this.oauthService.hasValidAccessToken()) {
+        console.log("Access token is not valid, initiating PKCE login flow");
+        this.oauthService.initCodeFlow(); // triggers PKCE login
+      }else {
+        console.log("Access token is valid, no need to login again");
+      }
+    });
   }
 
   logout() {

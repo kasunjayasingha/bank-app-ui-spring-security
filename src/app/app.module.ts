@@ -65,12 +65,12 @@ export function initializeAuth(oauthService: OAuthService): () => Promise<void> 
   ],
   providers: [
     OAuthService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeAuth,
-      deps: [OAuthService],
-      multi: true,
-    }
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeAuth,
+    //   deps: [OAuthService],
+    //   multi: true,
+    // }
   ],
   bootstrap: [AppComponent]
 })
