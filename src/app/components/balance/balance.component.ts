@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/model/user.model';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
+import {AuthService} from "../../services/AuthService";
 
 
 @Component({
@@ -12,13 +13,14 @@ export class BalanceComponent implements OnInit {
 
   user = new User();
   transactions = new Array();
+  email = "";
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.user = JSON.parse(sessionStorage.getItem('userdetails') || "");
-    if(this.user){
-      this.dashboardService.getAccountTransactions(this.user.email).subscribe(
+    this.email = this.authService.getClaims();
+    if(this.email){
+      this.dashboardService.getAccountTransactions(this.email).subscribe(
         responseData => {
         this.transactions = <any> responseData.body;
         });

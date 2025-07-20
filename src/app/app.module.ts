@@ -18,6 +18,7 @@ import { BalanceComponent } from './components/balance/balance.component';
 import { LoansComponent } from './components/loans/loans.component';
 import { CardsComponent } from './components/cards/cards.component';
 import { HomeComponent } from './components/home/home.component';
+import { PkceTestComponent } from './components/pkce-test/pkce-test.component';
 
 // OAuth2
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
@@ -45,7 +46,8 @@ export function initializeAuth(oauthService: OAuthService): () => Promise<void> 
     LoansComponent,
     CardsComponent,
     HomeComponent,
-    LoginCallbackComponent
+    LoginCallbackComponent,
+    PkceTestComponent
   ],
   imports: [
     BrowserModule,
@@ -65,12 +67,12 @@ export function initializeAuth(oauthService: OAuthService): () => Promise<void> 
   ],
   providers: [
     OAuthService,
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initializeAuth,
-    //   deps: [OAuthService],
-    //   multi: true,
-    // }
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAuth,
+      deps: [OAuthService],
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

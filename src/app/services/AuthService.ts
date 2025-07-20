@@ -26,7 +26,9 @@ export class AuthService {
   }
 
   logout() {
-    this.oauthService.logOut();
+    this.oauthService.logOut({
+      postLogoutRedirectUri: window.location.origin + '/login/callback'
+    });
   }
 
   get accessToken() {
@@ -52,10 +54,15 @@ export class AuthService {
     }
     try {
       const payload = JSON.parse(atob(accessToken.split('.')[1]));
-      return payload.roles || payload.authorities || [];
+      return payload.roles || payload.authority || [];
     } catch (err) {
       console.error("Invalid JWT", err);
       return [];
     }
+  }
+
+  getClaims(): string {
+    console.log("subject claim:", this.oauthService.getIdentityClaims()?.['sub']);
+    return this.oauthService.getIdentityClaims()?.['sub'];
   }
 }

@@ -7,9 +7,9 @@ export const authConfig: AuthConfig = {
   responseType: 'code', // required for PKCE
   scope: 'openid email',
   strictDiscoveryDocumentValidation: false,
-  showDebugInformation: false,
+  showDebugInformation: true,
   requireHttps: false, // allow HTTP for local testing
-  disableAtHashCheck: true,
+  disableAtHashCheck: false,
   useSilentRefresh: false,
   disablePKCE: false // ✅ ENABLE PKCE flow
 };

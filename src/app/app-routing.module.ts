@@ -12,6 +12,7 @@ import {CardsComponent} from './components/cards/cards.component';
 import {HomeComponent} from './components/home/home.component';
 import {AuthGuard} from "./routeguards/auth.routeguard";
 import {LoginCallbackComponent} from "./components/login-callback/login-callback.component";
+import {PkceTestComponent} from "./components/pkce-test/pkce-test.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,12 +21,13 @@ const routes: Routes = [
   { path: 'login/callback', component: LoginCallbackComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'notices', component: NoticesComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: 'logout', component: LogoutComponent },
-  { path: 'myAccount', component: AccountComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
-  { path: 'myBalance', component: BalanceComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
-  { path: 'myLoans', component: LoansComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
-  { path: 'myCards', component: CardsComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } }
+  { path: 'myAccount', component: AccountComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'myBalance', component: BalanceComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'myLoans', component: LoansComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'myCards', component: CardsComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'pkce-test', component: PkceTestComponent, canActivate: [AuthGuard], data: { roles: ['ROLE_ADMIN'] } }
 ];
 
 @NgModule({
