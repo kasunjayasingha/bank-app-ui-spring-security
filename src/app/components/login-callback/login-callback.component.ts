@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import {authConfig} from "../../auth/auth.config";
+import {AuthService} from "../../services/AuthService";
 
 @Component({
   selector: 'app-login-callback',
@@ -13,7 +14,11 @@ import {authConfig} from "../../auth/auth.config";
   `
 })
 export class LoginCallbackComponent implements OnInit {
-  constructor(private oauthService: OAuthService, private router: Router) {}
+  constructor(
+    private oauthService: OAuthService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     console.log('Login callback initiated - processing PKCE callback');
@@ -52,7 +57,7 @@ export class LoginCallbackComponent implements OnInit {
     } else {
       console.warn('❌ PKCE flow failed - Token not valid');
       console.log('Restarting PKCE flow...');
-      this.oauthService.initCodeFlow();
+      this.authService.login();
     }
   }
 }

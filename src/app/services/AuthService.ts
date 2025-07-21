@@ -7,11 +7,6 @@ export class AuthService {
   constructor(private oauthService: OAuthService) {
   }
 
-  private configure() {
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
-  }
-
   login() {
     // this.oauthService.initLoginFlow();
     this.oauthService.configure(authConfig);
@@ -26,9 +21,11 @@ export class AuthService {
   }
 
   logout() {
-    this.oauthService.logOut({
-      postLogoutRedirectUri: window.location.origin + '/login/callback'
-    });
+    this.oauthService.logOut();
+    setTimeout(() => {
+      console.log('Starting PKCE flow after logout...');
+      this.login();
+    }, 1000);
   }
 
   get accessToken() {

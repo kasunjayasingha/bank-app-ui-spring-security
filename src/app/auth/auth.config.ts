@@ -5,7 +5,7 @@ export const authConfig: AuthConfig = {
   redirectUri: window.location.origin + '/login/callback',
   clientId: 'eazypublicclient',
   responseType: 'code', // required for PKCE
-  scope: 'openid email',
+  scope: 'openid email offline_access',
   strictDiscoveryDocumentValidation: false,
   showDebugInformation: true,
   requireHttps: false, // allow HTTP for local testing

@@ -5,8 +5,12 @@ import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  template:  `
+    <div style="padding: 20px;">
+    <h2>Login</h2>
+      <p >Processing authentication...</p>
+    </div>
+  `
 })
 export class LoginComponent implements OnInit {
   model = { email: '', password: '' };
@@ -16,7 +20,9 @@ export class LoginComponent implements OnInit {
     private oauthService: OAuthService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.login();
+  }
 
   // Call OAuth2 login
   login(): void {
